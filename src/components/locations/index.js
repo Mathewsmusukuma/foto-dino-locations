@@ -8,8 +8,8 @@ import CreateCity from "../create-city";
 import { axiosInstance } from "../../services/AxiosInstance";
 import Loader from "../loader";
 
-export default function Cities() {
-  const [cities, setCities] = useState([]);
+export default function Locations() {
+  const [locations, setLocations] = useState([]);
   const [isEdit, setIsEdit] = useState(false);
   const [isAddCity, setIsAddCity] = useState(false);
   const [cityData, setCityData] = useState([]);
@@ -44,16 +44,16 @@ export default function Cities() {
 
   const fetchData = async () => {
     try {
-      const response = await axiosInstance.get("cities/");
+      const response = await axiosInstance.get("locations/");
       const data = response.data;
-      setCities(data);
+      setLocations(data);
     } catch (error) {
       console.log(error);
     }
   };
   const handleDelete = async (id) => {
     try {
-      const response = await axiosInstance.delete(`cities/${id}/`);
+      const response = await axiosInstance.delete(`locations/${id}/`);
       console.log(response.data);
     } catch (error) {
       console.log(error);
@@ -63,9 +63,9 @@ export default function Cities() {
   const handleSearch = async (data) => {
     const payload = { data };
     try {
-      const response = await axiosInstance.get("cities/", payload);
+      const response = await axiosInstance.get("locations/", payload);
       const data = response.data;
-      setCities(data);
+      setLocations(data);
     } catch (error) {
       console.log(error);
     }
@@ -78,28 +78,28 @@ export default function Cities() {
     const sortChoice = e.target.value;
     switch (sortChoice) {
       case "name":
-        const textResult = cities.sort(sortByText);
-        setCities(() => [...textResult]);
+        const textResult = locations.sort(sortByText);
+        setLocations(() => [...textResult]);
         break;
 
-      case "code":
-        const codeResult = cities.sort(sortByCode);
-        setCities(() => [...codeResult]);
+      case "status":
+        const statusResult = locations.sort(sortByCode);
+        setLocations(() => [...statusResult]);
         break;
 
       default:
-        setCities(cities);
+        setLocations(locations);
     }
   };
 
   return (
     <div>
-      <h3 class="title py-3">List of Cities</h3>
+      <h3 class="title py-3">List of Hotels</h3>
 
       <div class="container shadow py-3">
         <div class="row">
           <div class="col-md-5 mx-auto">
-            <div class="small fw-light">Search City</div>
+            <div class="small fw-light">Search Location</div>
             <form onSubmit={handleSubmit(handleSearch)}>
               <div class="input-group">
                 <input
@@ -121,39 +121,59 @@ export default function Cities() {
             <select className="form-select mt-4" onChange={handleSort}>
               <option value="">Select</option>
               <option value="name">Filter by name</option>
-              <option value="code">Filter by code</option>
+              <option value="status">Filter by status</option>
             </select>
           </div>
         </div>
       </div>
 
-      {cities.length < 1 && <Loader />}
+      {locations.length < 1 && <Loader />}
 
-      {cities &&
-        cities?.map((data) => (
-          <>
-            <ul class="list-group">
-              <li class="list-group-item m-2">
-                {data?.name}{" "}
-                <Button
-                  onClick={() => {
-                    setIsEdit(true);
-                    setCityData(data);
-                  }}
-                  className="float-end m-1"
-                >
-                  Edit
-                </Button>{" "}
-                <Button
-                  onClick={() => handleDelete(data?.id)}
-                  className="m-1 float-end"
-                >
-                  Delete
-                </Button>
-              </li>
-            </ul>
-          </>
-        ))}
+      <table class="table table-bordered table-hover">
+        {locations.length > 0 && (
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">Hotel Name</th>
+              <th scope="col">Email</th>
+              <th scope="col">Phone Number</th>
+              <th scope="col">Status</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+        )}
+        <tbody>
+          {locations &&
+            locations?.map((data) => (
+              <>
+                <tr>
+                  <th scope="row">{data?.name}</th>
+                  <td>{data?.email}</td>
+                  <td>{data?.phone}</td>
+                  <td>{data?.status}</td>
+                  <td>
+                    {" "}
+                    <Button
+                      onClick={() => {
+                        setIsEdit(true);
+                        setCityData(data);
+                      }}
+                      className="float-end m-1"
+                    >
+                      Edit
+                    </Button>{" "}
+                    <Button
+                      onClick={() => handleDelete(data?.id)}
+                      className="m-1 float-end"
+                    >
+                      Delete
+                    </Button>
+                  </td>
+                </tr>
+              </>
+            ))}
+        </tbody>
+      </table>
+
       {isEdit && (
         <UpdateCity
           show={isEdit}
