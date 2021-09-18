@@ -14,7 +14,8 @@ export default function UpdateCity(props) {
 
   useEffect(() => {
     setForm();
-  }, [setForm]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleUpdate = async (data) => {
     const new_data = { ...props.updateData, name: data["name"] };
