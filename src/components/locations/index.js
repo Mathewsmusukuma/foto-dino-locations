@@ -13,11 +13,12 @@ export default function Locations() {
   const [isEdit, setIsEdit] = useState(false);
   const [isAddCity, setIsAddCity] = useState(false);
   const [cityData, setCityData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const ASC = "ascending";
 
-  const sortByCode = (a, b, order = ASC) => {
-    const diff = a.code - b.code;
+  const sortByEmail = (a, b, order = ASC) => {
+    const diff = a.email.toLowerCase().localeCompare(b.email.toLowerCase());
 
     if (order === ASC) {
       return diff;
@@ -44,9 +45,11 @@ export default function Locations() {
 
   const fetchData = async () => {
     try {
+      setIsLoading(true);
       const response = await axiosInstance.get("locations/");
       const data = response.data;
       setLocations(data);
+      setIsLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -61,11 +64,13 @@ export default function Locations() {
   };
 
   const handleSearch = async (data) => {
-    const payload = { data };
+    const payload = data;
     try {
+      setIsLoading(true);
       const response = await axiosInstance.get("locations/", payload);
       const data = response.data;
       setLocations(data);
+      setIsLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -82,9 +87,9 @@ export default function Locations() {
         setLocations(() => [...textResult]);
         break;
 
-      case "status":
-        const statusResult = locations.sort(sortByCode);
-        setLocations(() => [...statusResult]);
+      case "email":
+        const emailResult = locations.sort(sortByEmail);
+        setLocations(() => [...emailResult]);
         break;
 
       default:
@@ -106,7 +111,7 @@ export default function Locations() {
                   class="form-control border-end-0 border rounded-pill"
                   type="search"
                   id="example-search-input"
-                  {...register("keyword", { required: true })}
+                  {...register("search", { required: true })}
                 />
                 <span class="input-group-append">
                   <button
@@ -121,57 +126,59 @@ export default function Locations() {
             <select className="form-select mt-4" onChange={handleSort}>
               <option value="">Select</option>
               <option value="name">Filter by name</option>
-              <option value="status">Filter by status</option>
+              <option value="emai">Filter by email</option>
             </select>
           </div>
         </div>
       </div>
 
-      {locations.length < 1 && <Loader />}
+      {isLoading && <Loader />}
 
       <table class="table table-bordered table-hover">
-        {locations.length > 0 && (
-          <thead class="thead-dark">
-            <tr>
-              <th scope="col">Hotel Name</th>
-              <th scope="col">Email</th>
-              <th scope="col">Phone Number</th>
-              <th scope="col">Status</th>
-              <th scope="col">Action</th>
-            </tr>
-          </thead>
+        {!isLoading && (
+          <>
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col">Hotel Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Phone Number</th>
+                <th scope="col">Status</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {locations &&
+                locations?.map((data) => (
+                  <>
+                    <tr>
+                      <th scope="row">{data?.name}</th>
+                      <td>{data?.email}</td>
+                      <td>{data?.phone}</td>
+                      <td>{data?.status}</td>
+                      <td>
+                        {" "}
+                        <Button
+                          onClick={() => {
+                            setIsEdit(true);
+                            setCityData(data);
+                          }}
+                          className="float-end m-1"
+                        >
+                          Edit
+                        </Button>{" "}
+                        <Button
+                          onClick={() => handleDelete(data?.id)}
+                          className="m-1 float-end"
+                        >
+                          Delete
+                        </Button>
+                      </td>
+                    </tr>
+                  </>
+                ))}
+            </tbody>
+          </>
         )}
-        <tbody>
-          {locations &&
-            locations?.map((data) => (
-              <>
-                <tr>
-                  <th scope="row">{data?.name}</th>
-                  <td>{data?.email}</td>
-                  <td>{data?.phone}</td>
-                  <td>{data?.status}</td>
-                  <td>
-                    {" "}
-                    <Button
-                      onClick={() => {
-                        setIsEdit(true);
-                        setCityData(data);
-                      }}
-                      className="float-end m-1"
-                    >
-                      Edit
-                    </Button>{" "}
-                    <Button
-                      onClick={() => handleDelete(data?.id)}
-                      className="m-1 float-end"
-                    >
-                      Delete
-                    </Button>
-                  </td>
-                </tr>
-              </>
-            ))}
-        </tbody>
       </table>
 
       {isEdit && (

@@ -13,6 +13,7 @@ export default function Cities() {
   const [isEdit, setIsEdit] = useState(false);
   const [isAddCity, setIsAddCity] = useState(false);
   const [cityData, setCityData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const ASC = "ascending";
 
@@ -44,9 +45,11 @@ export default function Cities() {
 
   const fetchData = async () => {
     try {
+      setIsLoading(true)
       const response = await axiosInstance.get("cities/");
       const data = response.data;
       setCities(data);
+      setIsLoading(false)
     } catch (error) {
       console.log(error);
     }
@@ -63,9 +66,11 @@ export default function Cities() {
   const handleSearch = async (data) => {
     const payload = { data };
     try {
+      setIsLoading(true)
       const response = await axiosInstance.get("cities/", payload);
       const data = response.data;
       setCities(data);
+      setIsLoading(false)
     } catch (error) {
       console.log(error);
     }
@@ -127,9 +132,9 @@ export default function Cities() {
         </div>
       </div>
 
-      {cities.length < 1 && <Loader />}
+      {isLoading && <Loader />}
 
-      {cities &&
+      {!isLoading &&
         cities?.map((data) => (
           <>
             <ul class="list-group">
