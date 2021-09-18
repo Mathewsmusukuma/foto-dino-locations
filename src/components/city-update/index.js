@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 import { useForm } from "react-hook-form";
-import axios from "axios";
+import { axiosInstance } from "../../services/AxiosInstance";
 
 export default function UpdateCity(props) {
 
@@ -14,12 +14,6 @@ export default function UpdateCity(props) {
     formState: { errors },
   } = useForm();
 
-  const instance = axios.create({
-    baseURL: "https://api.photodino.com/locations/",
-    withCredentials: false,
-    headers: {},
-  });
-
   useEffect(() => {
     reset({ name: props.updatedata.name });
   }, []);
@@ -27,7 +21,7 @@ export default function UpdateCity(props) {
   const handleUpdate = async (data) => {
     const new_data = { ...props.updateData, name: data["name"] };
     try {
-      const response = await instance.put(
+      const response = await axiosInstance.put(
         `cities/${props.updatedata.id}/`,
         new_data
       );
@@ -37,7 +31,6 @@ export default function UpdateCity(props) {
       console.log(error);
     }
   };
- console.log(show);
   return (
     <div>
       <Modal

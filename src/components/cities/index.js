@@ -3,9 +3,10 @@ import axios from "axios";
 import UpdateCity from "../city-update";
 import { Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faSearch, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useForm } from "react-hook-form";
 import CreateCity from "../create-city";
+import { axiosInstance } from "../../services/AxiosInstance";
 
 export default function Cities() {
   const [cities, setCities] = useState([]);
@@ -36,24 +37,15 @@ export default function Cities() {
     return -1 * diff;
   };
 
-  const instance = axios.create({
-    baseURL: "https://api.photodino.com/locations/",
-    withCredentials: false,
-    headers: {},
-  });
   useEffect(() => {
     fetchData();
   }, []);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+  const { register, handleSubmit } = useForm();
 
   const fetchData = async () => {
     try {
-      const response = await instance.get("cities/");
+      const response = await axiosInstance.get("cities/");
       const data = response.data;
       setCities(data);
     } catch (error) {
@@ -62,7 +54,7 @@ export default function Cities() {
   };
   const handleDelete = async (id) => {
     try {
-      const response = await instance.delete(`cities/${id}/`);
+      const response = await axiosInstance.delete(`cities/${id}/`);
       const data = response.data;
     } catch (error) {
       console.log(error);
@@ -70,9 +62,9 @@ export default function Cities() {
   };
 
   const handleSearch = async (data) => {
-    const searchKey = data["keyword"];
+    const payload = { data };
     try {
-      const response = await instance.get("cities/", { name: "test" });
+      const response = await axiosInstance.get("cities/", payload);
       const data = response.data;
       setCities(data);
     } catch (error) {
@@ -88,12 +80,12 @@ export default function Cities() {
     switch (sortChoice) {
       case "name":
         const textResult = cities.sort(sortByText);
-        setCities(()=> ([...textResult]));
+        setCities(() => [...textResult]);
         break;
 
       case "code":
         const codeResult = cities.sort(sortByCode);
-        setCities(()=> ([...codeResult]));      
+        setCities(() => [...codeResult]);
         break;
 
       default:
@@ -103,7 +95,7 @@ export default function Cities() {
 
   return (
     <div>
-      <h5 class="card-title">List of Cities</h5>
+      <h3 class="title py-3">List of Cities</h3>
 
       <div class="container shadow py-3">
         <div class="row">
@@ -127,12 +119,6 @@ export default function Cities() {
                 </span>
               </div>
             </form>
-            <button
-              className="btn btn-outline-primary ml-8 float-end add-city"
-              onClick={() => handleCreateCity()}
-            >
-              Add City
-            </button>
             <select className="form-select mt-4" onChange={handleSort}>
               <option value="">Select</option>
               <option value="name">Filter by name</option>
@@ -177,6 +163,10 @@ export default function Cities() {
       {isAddCity && (
         <CreateCity show={isAddCity} onHide={() => setIsAddCity(false)} />
       )}
+
+      <a onClick={() => handleCreateCity()} className="float">
+        <FontAwesomeIcon icon={faPlus} className="my-float" />
+      </a>
     </div>
   );
 }

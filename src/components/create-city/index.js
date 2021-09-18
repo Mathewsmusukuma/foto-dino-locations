@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 import { useForm } from "react-hook-form";
-import axios from "axios";
+import { axiosInstance } from "../../services/AxiosInstance";
 
 export default function CreateCity(props) {
 
@@ -13,17 +13,11 @@ export default function CreateCity(props) {
     formState: { errors },
   } = useForm();
 
-  const instance = axios.create({
-    baseURL: "https://api.photodino.com/locations/",
-    withCredentials: false,
-    headers: {},
-  });
-
   const handleCreate = async (data) => {
       const payload = {...data, locations: [data["locations"].split(" ")]};
       console.log(payload);
     try {
-      const response = await instance.post("cities/",payload);
+      const response = await axiosInstance.post("cities/",payload);
       const data = response;
       console.log(data);
       if(data.id) setShow(true);
