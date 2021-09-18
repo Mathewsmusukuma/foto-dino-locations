@@ -7,6 +7,8 @@ import { useForm } from "react-hook-form";
 import CreateCity from "../create-city";
 import { axiosInstance } from "../../services/AxiosInstance";
 import Loader from "../loader";
+import CreateLocation from "../createLocation";
+import UpdateLocation from "../updateLocation";
 
 export default function Locations() {
   const [locations, setLocations] = useState([]);
@@ -182,14 +184,14 @@ export default function Locations() {
       </table>
 
       {isEdit && (
-        <UpdateCity
+        <UpdateLocation
           show={isEdit}
           onHide={() => setIsEdit(false)}
           updatedata={cityData}
         />
       )}
       {isAddCity && (
-        <CreateCity show={isAddCity} onHide={() => setIsAddCity(false)} />
+        <CreateLocation show={isAddCity} onHide={() => setIsAddCity(false)} />
       )}
 
       <button onClick={() => handleCreateCity()} className="float">

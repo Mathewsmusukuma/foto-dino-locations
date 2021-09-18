@@ -16,9 +16,8 @@ export default function CreateCity(props) {
       console.log(payload);
     try {
       const response = await axiosInstance.post("cities/",payload);
-      const data = response;
-      console.log(data);
-      if(data.id) setShow(true);
+      console.log(response.data);
+      if(response.data.id) setShow(true);
     } catch (error) {
       console.log(error.response.data);
     }
