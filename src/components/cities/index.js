@@ -162,9 +162,9 @@ export default function Cities() {
         <CreateCity show={isAddCity} onHide={() => setIsAddCity(false)} />
       )}
 
-      <a href="#" onClick={() => handleCreateCity()} className="float">
+      <button onClick={() => handleCreateCity()} className="float">
         <FontAwesomeIcon icon={faPlus} className="my-float" />
-      </a>
+      </button>
     </div>
   );
 }
