@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import Cities from "./components/cities";
+import Dashboard from "./components/dashboard";
 import Footer from "./components/footer";
 import Header from "./components/header";
 
@@ -12,7 +12,7 @@ function App() {
         <Router>
           <Switch>
             <Route path="/">
-              <Cities />
+              <Dashboard />
             </Route>
           </Switch>
         </Router>
