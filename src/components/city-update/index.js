@@ -18,7 +18,7 @@ export default function UpdateCity(props) {
         reset({ name: props.updatedata.name });
     }
     setForm();
-  }, []);
+  });
 
   const handleUpdate = async (data) => {
     const new_data = { ...props.updateData, name: data["name"] };
