@@ -1,4 +1,4 @@
-# Getting Started with Create React App
+# Foto Dino Locations App
  Clone the app `https://github.com/Mathewsmusukuma/foto-dino-locations.git`
 
 ## Available Scripts
