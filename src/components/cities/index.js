@@ -13,6 +13,29 @@ export default function Cities() {
   const [isAddCity, setIsAddCity] = useState(false);
   const [cityData, setCityData] = useState([]);
 
+  const ASC = "ascending";
+  const DSC = "descending";
+
+  const sortByCode = (a, b, order = ASC) => {
+    const diff = a.code - b.code;
+
+    if (order === ASC) {
+      return diff;
+    }
+
+    return -1 * diff;
+  };
+
+  const sortByText = (a, b, order = ASC) => {
+    const diff = a.name.toLowerCase().localeCompare(b.name.toLowerCase());
+
+    if (order === ASC) {
+      return diff;
+    }
+
+    return -1 * diff;
+  };
+
   const instance = axios.create({
     baseURL: "https://api.photodino.com/locations/",
     withCredentials: false,
@@ -32,7 +55,6 @@ export default function Cities() {
     try {
       const response = await instance.get("cities/");
       const data = response.data;
-      console.log(data);
       setCities(data);
     } catch (error) {
       console.log(error);
@@ -42,7 +64,6 @@ export default function Cities() {
     try {
       const response = await instance.delete(`cities/${id}/`);
       const data = response.data;
-      console.log(data);
     } catch (error) {
       console.log(error);
     }
@@ -50,20 +71,35 @@ export default function Cities() {
 
   const handleSearch = async (data) => {
     const searchKey = data["keyword"];
-    console.log(searchKey);
     try {
       const response = await instance.get("cities/", { name: "test" });
       const data = response.data;
-      console.log(data);
-
       setCities(data);
     } catch (error) {
       console.log(error);
     }
   };
-  const handleCreateCity = () =>{
-      setIsAddCity(true)
-  }
+  const handleCreateCity = () => {
+    setIsAddCity(true);
+  };
+
+  const handleSort = (e) => {
+    const sortChoice = e.target.value;
+    switch (sortChoice) {
+      case "name":
+        const textResult = cities.sort(sortByText);
+        setCities(()=> ([...textResult]));
+        break;
+
+      case "code":
+        const codeResult = cities.sort(sortByCode);
+        setCities(()=> ([...codeResult]));      
+        break;
+
+      default:
+        setCities(cities);
+    }
+  };
 
   return (
     <div>
@@ -91,22 +127,27 @@ export default function Cities() {
                 </span>
               </div>
             </form>
-            <button 
-            className="btn btn-outline-primary ml-8 float-end add-city" 
-            onClick={() => handleCreateCity()}
+            <button
+              className="btn btn-outline-primary ml-8 float-end add-city"
+              onClick={() => handleCreateCity()}
             >
               Add City
             </button>
+            <select className="form-select mt-4" onChange={handleSort}>
+              <option value="">Select</option>
+              <option value="name">Filter by name</option>
+              <option value="code">Filter by code</option>
+            </select>
           </div>
         </div>
       </div>
 
       {cities &&
-        cities.map((data) => (
+        cities?.map((data) => (
           <>
             <ul class="list-group">
               <li class="list-group-item m-2">
-                {data.name}{" "}
+                {data?.name}{" "}
                 <Button
                   onClick={() => {
                     setIsEdit(true);
@@ -117,7 +158,7 @@ export default function Cities() {
                   Edit
                 </Button>{" "}
                 <Button
-                  onClick={() => handleDelete(data.id)}
+                  onClick={() => handleDelete(data?.id)}
                   className="m-1 float-end"
                 >
                   Delete
@@ -134,10 +175,7 @@ export default function Cities() {
         />
       )}
       {isAddCity && (
-        <CreateCity
-          show={isAddCity}
-          onHide={() => setIsAddCity(false)}
-        />
+        <CreateCity show={isAddCity} onHide={() => setIsAddCity(false)} />
       )}
     </div>
   );
