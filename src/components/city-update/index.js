@@ -14,7 +14,10 @@ export default function UpdateCity(props) {
   } = useForm();
 
   useEffect(() => {
-    reset({ name: props.updatedata.name });
+    const setForm = () =>{
+        reset({ name: props.updatedata.name });
+    }
+    setForm();
   }, []);
 
   const handleUpdate = async (data) => {

@@ -53,6 +53,7 @@ export default function Cities() {
   const handleDelete = async (id) => {
     try {
       const response = await axiosInstance.delete(`cities/${id}/`);
+      console.log(response.data);
     } catch (error) {
       console.log(error);
     }
