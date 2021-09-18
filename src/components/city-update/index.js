@@ -4,21 +4,17 @@ import { useForm } from "react-hook-form";
 import { axiosInstance } from "../../services/AxiosInstance";
 
 export default function UpdateCity(props) {
-
   const [show, setShow] = useState(false);
 
-  const {
-    register,
-    reset,
-    handleSubmit,
-  } = useForm();
+  const { register, reset, handleSubmit } = useForm();
+
+  const setForm = () => {
+    reset({ name: props.updatedata.name });
+  };
 
   useEffect(() => {
-    const setForm = () =>{
-        reset({ name: props.updatedata.name });
-    }
     setForm();
-  });
+  }, [setForm]);
 
   const handleUpdate = async (data) => {
     const new_data = { ...props.updateData, name: data["name"] };
@@ -28,7 +24,7 @@ export default function UpdateCity(props) {
         new_data
       );
       const data = response.data;
-      if(data.id) setShow(true);
+      if (data.id) setShow(true);
     } catch (error) {
       console.log(error);
     }
