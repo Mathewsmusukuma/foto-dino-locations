@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import UpdateCity from "../city-update";
 import { Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -15,7 +14,6 @@ export default function Cities() {
   const [cityData, setCityData] = useState([]);
 
   const ASC = "ascending";
-  const DSC = "descending";
 
   const sortByCode = (a, b, order = ASC) => {
     const diff = a.code - b.code;
@@ -55,7 +53,6 @@ export default function Cities() {
   const handleDelete = async (id) => {
     try {
       const response = await axiosInstance.delete(`cities/${id}/`);
-      const data = response.data;
     } catch (error) {
       console.log(error);
     }
@@ -164,7 +161,7 @@ export default function Cities() {
         <CreateCity show={isAddCity} onHide={() => setIsAddCity(false)} />
       )}
 
-      <a onClick={() => handleCreateCity()} className="float">
+      <a href="#" onClick={() => handleCreateCity()} className="float">
         <FontAwesomeIcon icon={faPlus} className="my-float" />
       </a>
     </div>

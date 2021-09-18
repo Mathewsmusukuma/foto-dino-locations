@@ -11,7 +11,6 @@ export default function UpdateCity(props) {
     register,
     reset,
     handleSubmit,
-    formState: { errors },
   } = useForm();
 
   useEffect(() => {

@@ -21,7 +21,7 @@ export default function Header() {
       <div className="collapse navbar-collapse" id="navbarExample01">
         <ul className="navbar-nav me-auto mb-2 mb-lg-0">
           <li className="nav-item active">
-            <a className="nav-link" aria-current="page" href="#">Home</a>
+            <span>Home</span>
           </li>
         </ul>
       </div>

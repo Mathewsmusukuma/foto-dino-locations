@@ -1,16 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { axiosInstance } from "../../services/AxiosInstance";
 
 export default function CreateCity(props) {
-
   const [show, setShow] = useState(false);
 
   const {
     register,
     handleSubmit,
-    formState: { errors },
   } = useForm();
 
   const handleCreate = async (data) => {
@@ -25,7 +23,6 @@ export default function CreateCity(props) {
       console.log(error.response.data);
     }
   };
- console.log(show);
   return (
     <div>
       <Modal
