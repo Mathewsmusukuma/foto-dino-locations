@@ -22,10 +22,10 @@ export default function UpdateLocation(props) {
     const new_data = data;
     try {
       const response = await axiosInstance.put(
-        `location/${props.updatedata.id}/`,
+        `locations/${props.updatedata.id}/`,
         new_data
       );
-      console.log(response .data);
+      console.log(response.data);
       if (response.data.id) setShow(false);
     } catch (error) {
       console.log(error.response.data);
@@ -48,55 +48,96 @@ export default function UpdateLocation(props) {
         </Modal.Header>
         <form onSubmit={handleSubmit(handleUpdate)}>
           <Modal.Body>
-            <input
-              className="form-control form-control-lg py-1 mt-2"
-              type="text"
-              placeholder="Enter location name"
-              {...register("name", { required: true })}
-              aria-label="Location"
-            />
-            <input
-              className="form-control form-control-lg py-1 mt-2"
-              type="text"
-              placeholder="Enter email address"
-              {...register("email", { required: true })}
-              aria-label="Email"
-            />
-            <input
-              className="form-control form-control-lg py-1 mt-2"
-              type="text"
-              placeholder="Enter phone number"
-              {...register("phone", { required: true })}
-              aria-label="Phone"
-            />
-            <input
-              className="form-control form-control-lg py-1 mt-2"
-              type="text"
-              placeholder="Enter street number"
-              {...register("street_number", { required: true })}
-              aria-label="Street number"
-            />
-            <input
-              className="form-control form-control-lg py-1 mt-2"
-              type="text"
-              placeholder="Enter street name"
-              {...register("street_name", { required: true })}
-              aria-label="Street name"
-            />
-            <input
-              className="form-control form-control-lg py-1 mt-2"
-              placeholder="Enter postal code"
-              type="text"
-              {...register("postal_code", { required: true })}
-              aria-label="postal_code"
-            />
-            <input
-              className="form-control form-control-lg py-1 mt-2"
-              placeholder="Enter state 'available or unavailable"
-              type="text"
-              {...register("status", { required: true })}
-              aria-label="status"
-            />
+            <div class="mb-3">
+              <label for="exampleFormControlInput1" class="form-label">
+                Enter location name
+              </label>
+              <input
+                className="form-control form-control-lg py-1"
+                type="text"
+                placeholder="Enter location name"
+                {...register("name", { required: true })}
+                aria-label="Location"
+              />
+            </div>
+
+            <div class="mb-3">
+              <label for="exampleFormControlInput1" class="form-label">
+                Enter email address
+              </label>
+              <input
+                className="form-control form-control-lg py-1"
+                type="text"
+                placeholder="Enter email address"
+                {...register("email", { required: true })}
+                aria-label="Email"
+              />
+            </div>
+
+            <div class="mb-3">
+              <label for="exampleFormControlInput1" class="form-label">
+                Enter phone number
+              </label>
+              <input
+                className="form-control form-control-lg py-1"
+                type="text"
+                placeholder="Enter phone number"
+                {...register("phone", { required: true })}
+                aria-label="Phone"
+              />
+            </div>
+
+            <div class="mb-3">
+              <label for="exampleFormControlInput1" class="form-label">
+                Enter street number
+              </label>
+              <input
+                className="form-control form-control-lg py-1"
+                type="text"
+                placeholder="Enter street number"
+                {...register("street_number", { required: true })}
+                aria-label="Street number"
+              />
+            </div>
+
+            <div class="mb-3">
+              <label for="exampleFormControlInput1" class="form-label">
+                Enter street name
+              </label>
+              <input
+                className="form-control form-control-lg py-1"
+                type="text"
+                placeholder="Enter street name"
+                {...register("street_name", { required: true })}
+                aria-label="Street name"
+              />
+            </div>
+
+            <div class="mb-3">
+              <label for="exampleFormControlInput1" class="form-label">
+                Enter postal code
+              </label>
+              <input
+                className="form-control form-control-lg py-1"
+                placeholder="Enter postal code"
+                type="text"
+                {...register("postal_code", { required: true })}
+                aria-label="postal_code"
+              />
+            </div>
+
+            <div class="mb-3">
+              <label for="exampleFormControlInput1" class="form-label">
+                Enter state 'available or unavailable
+              </label>
+              <input
+                className="form-control form-control-lg py-1"
+                placeholder="Enter state 'available or unavailable"
+                type="text"
+                {...register("status", { required: true })}
+                aria-label="status"
+              />
+            </div>
           </Modal.Body>
           <Modal.Footer>
             <Button type="submit">Update</Button>

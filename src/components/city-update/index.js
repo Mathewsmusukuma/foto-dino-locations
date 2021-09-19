@@ -9,7 +9,7 @@ export default function UpdateCity(props) {
   const { register, reset, handleSubmit } = useForm();
 
   const setForm = () => {
-    reset({ name: props.updatedata.name });
+    reset({ name: props.updatedata.name, code: props.updatedata.code});
   };
 
   useEffect(() => {
@@ -18,7 +18,7 @@ export default function UpdateCity(props) {
   }, []);
 
   const handleUpdate = async (data) => {
-    const new_data = { ...props.updateData, name: data["name"] };
+    const new_data = { ...props.updateData, name: data["name"], code: data["code"] };
     try {
       const response = await axiosInstance.put(
         `cities/${props.updatedata.id}/`,
@@ -47,12 +47,28 @@ export default function UpdateCity(props) {
         </Modal.Header>
         <form onSubmit={handleSubmit(handleUpdate)}>
           <Modal.Body>
-            <input
-              className="form-control form-control-lg py-1"
-              type="text"
-              {...register("name", { required: true })}
-              aria-label="City"
-            />
+            <div class="mb-3">
+              <label for="exampleFormControlInput1" class="form-label">
+                Enter city name
+              </label>
+              <input
+                className="form-control form-control-lg py-1"
+                type="text"
+                {...register("name", { required: true })}
+                aria-label="City"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="exampleFormControlInput1" class="form-label">
+                Enter city code
+              </label>
+              <input
+                className="form-control form-control-lg py-1"
+                type="text"
+                {...register("code", { required: true })}
+                aria-label="code"
+              />
+            </div>
           </Modal.Body>
           <Modal.Footer>
             <Button type="submit">Update</Button>
