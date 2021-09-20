@@ -6,6 +6,7 @@ import { axiosInstance } from "../../services/AxiosInstance";
 export default function UpdateCity(props) {
   const [show, setShow] = useState(false);
 
+  const handleClose = () => {setShow(false);}
   const { register, reset, handleSubmit } = useForm();
 
   const setForm = () => {
@@ -13,6 +14,7 @@ export default function UpdateCity(props) {
   };
 
   useEffect(() => {
+    setShow(props.show)
     setForm();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -24,8 +26,12 @@ export default function UpdateCity(props) {
         `cities/${props.updatedata.id}/`,
         new_data
       );
-      const data = response.data;
-      if (data.id) setShow(true);
+      if (response.data.id) {
+          setShow(false);
+          handleClose();
+          window.location.href = "/";
+
+      }
     } catch (error) {
       console.log(error);
     }
@@ -37,8 +43,8 @@ export default function UpdateCity(props) {
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
-        show={props.show}
-        onHide={show}
+        show={show}
+        onHide={handleClose}
       >
         <Modal.Header>
           <Modal.Title id="contained-modal-title-vcenter">

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect} from "react";
 import { Modal, Button } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { axiosInstance } from "../../services/AxiosInstance";
@@ -6,15 +6,21 @@ import { axiosInstance } from "../../services/AxiosInstance";
 export default function CreateLocation(props) {
   const [show, setShow] = useState(false);
 
+  const handleClose = () => {setShow(false);}
   const { register, handleSubmit } = useForm();
 
+  useEffect(() => {
+    setShow(true);
+  })
   const handleCreate = async (data) => {
     const payload = data;
-    console.log(payload);
     try {
       const response = await axiosInstance.post("locations/", payload);
-      console.log(response.data);
-      if (response.data.id) setShow(false);
+      if (response.data.id) {
+        setShow(false);
+        handleClose();
+        window.location.href = "/";
+    }
     } catch (error) {
       console.log(error.response.data);
     }
@@ -26,8 +32,8 @@ export default function CreateLocation(props) {
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
-        show={props.show}
-        onHide={show}
+        show={show}
+        onHide={handleClose}
       >
         <Modal.Header>
           <Modal.Title id="contained-modal-title-vcenter">

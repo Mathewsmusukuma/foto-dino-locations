@@ -6,6 +6,7 @@ import { axiosInstance } from "../../services/AxiosInstance";
 export default function UpdateLocation(props) {
   const [show, setShow] = useState(false);
 
+  const handleClose = () => {setShow(false);}
   const { register, reset, handleSubmit } = useForm();
 
   const setForm = () => {
@@ -15,6 +16,7 @@ export default function UpdateLocation(props) {
 
   useEffect(() => {
     setForm();
+    setShow(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -25,8 +27,11 @@ export default function UpdateLocation(props) {
         `locations/${props.updatedata.id}/`,
         new_data
       );
-      console.log(response.data);
-      if (response.data.id) setShow(false);
+      if (response.data.id) {
+        setShow(false);
+        handleClose();
+        window.location.href = "/";
+    }
     } catch (error) {
       console.log(error.response.data);
     }
@@ -38,8 +43,8 @@ export default function UpdateLocation(props) {
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
-        show={props.show}
-        onHide={show}
+        show={show}
+        onHide={handleClose}
       >
         <Modal.Header>
           <Modal.Title id="contained-modal-title-vcenter">
