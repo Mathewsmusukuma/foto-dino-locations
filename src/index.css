@@ -51,3 +51,11 @@ code {
   margin-left: 10px;
   font-style: italic;
 }
+
+button {
+  margin: 10px !important;
+}
+
+.container{
+  margin-top: 12px !important;
+}
