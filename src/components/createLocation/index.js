@@ -1,168 +1,206 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Button } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { axiosInstance } from "../../services/AxiosInstance";
+import { useHistory } from "react-router-dom";
 
-export default function CreateLocation(props) {
-  const [show, setShow] = useState(false);
+export default function CreateLocation() {
+  const [cities, setCities] = useState([]);
+  const history = useHistory();
 
-  const handleClose = () => {setShow(false);}
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, formState: { errors} } = useForm();
+
+  const getCites = async () => {
+    try {
+      const response = await axiosInstance.get("cities/");
+      setCities(response.data);
+    } catch (error) {
+      console.log(error.response.data);
+    }
+  };
 
   useEffect(() => {
-    setShow(true);
-  })
+    getCites();
+  }, [getCites]);
+
   const handleCreate = async (data) => {
     const payload = data;
     try {
       const response = await axiosInstance.post("locations/", payload);
       if (response.data.id) {
-        setShow(false);
-        handleClose();
-        window.location.href = "/";
-    }
+        history.replace("/");
+      }
     } catch (error) {
       console.log(error.response.data);
     }
   };
+
   return (
-    <div>
-      <Modal
-        {...props}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-        show={show}
-        onHide={handleClose}
-      >
-        <Modal.Header>
-          <Modal.Title id="contained-modal-title-vcenter">
-            CREATE LOCATION
-          </Modal.Title>
-        </Modal.Header>
-        <form onSubmit={handleSubmit(handleCreate)}>
-          <Modal.Body>
-            <div class="mb-3">
-              <label for="exampleFormControlInput1" class="form-label">
-                Enter hotel name
-              </label>
-              <input
-                className="form-control form-control-lg py-1"
-                type="text"
-                placeholder="Enter location name"
-                {...register("name", { required: true })}
-                aria-label="Location"
-              />
-            </div>
+    <>
+      CREATE LOCATION
+      <form onSubmit={handleSubmit(handleCreate)}>
+        <div className="mb-3">
+          <label for="exampleFormControlInput1" className="form-label">
+            Enter location name
+          </label>
+          <input
+            className="form-control form-control-lg py-1"
+            type="text"
+            placeholder="Enter location name"
+            {...register("name", { required: true })}
+            aria-label="Location"
+          />
+          {errors.name && (
+            <span className="alert alert-danger p-1" role="alert">
+              Location name is required
+            </span>
+          )}
+        </div>
 
-            <div class="mb-3">
-              <label for="exampleFormControlInput1" class="form-label">
-                Enter email address
-              </label>
-              <input
-                className="form-control form-control-lg py-1"
-                type="text"
-                placeholder="Enter email address"
-                {...register("email", { required: true })}
-                aria-label="Email"
-              />
-            </div>
+        <div className="mb-3">
+          <label for="exampleFormControlInput1" className="form-label">
+            Enter email address
+          </label>
+          <input
+            className="form-control form-control-lg py-1"
+            type="text"
+            placeholder="Enter email address"
+            {...register("email", { required: true })}
+            aria-label="Email"
+          />
+          {errors.email && (
+            <span className="alert alert-danger p-1" role="alert">
+              Location email is required
+            </span>
+          )}
+        </div>
 
-            <div class="mb-3">
-              <label for="exampleFormControlInput1" class="form-label">
-                Enter phone number
-              </label>
-              <input
-                className="form-control form-control-lg py-1"
-                type="text"
-                placeholder="Enter phone number"
-                {...register("phone", { required: true })}
-                aria-label="Phone"
-              />
-            </div>
+        <div className="mb-3">
+          <label for="exampleFormControlInput1" className="form-label">
+            Enter phone number
+          </label>
+          <input
+            className="form-control form-control-lg py-1"
+            type="text"
+            placeholder="Enter phone number"
+            {...register("phone", { required: true })}
+            aria-label="Phone"
+          />
+          {errors.phone && (
+            <span className="alert alert-danger p-1" role="alert">
+              Location phone is required
+            </span>
+          )}
+        </div>
 
-            <div class="mb-3">
-              <label for="exampleFormControlInput1" class="form-label">
-                Enter street number
-              </label>
-              <input
-                className="form-control form-control-lg py-1"
-                type="text"
-                placeholder="Enter street number"
-                {...register("street_number", { required: true })}
-                aria-label="Street number"
-              />
-            </div>
+        <div className="mb-3">
+          <label for="exampleFormControlInput1" className="form-label">
+            Enter street number
+          </label>
+          <input
+            className="form-control form-control-lg py-1"
+            type="text"
+            placeholder="Enter street number"
+            {...register("street_number", { required: true })}
+            aria-label="Street number"
+          />
 
-            <div class="mb-3">
-              <label for="exampleFormControlInput1" class="form-label">
-                Enter street name
-              </label>
-              <input
-                className="form-control form-control-lg py-1"
-                type="text"
-                placeholder="Enter street name"
-                {...register("street_name", { required: true })}
-                aria-label="Street name"
-              />
-            </div>
+          {errors.street_number && (
+            <span className="alert alert-danger p-1" role="alert">
+              Street number is required
+            </span>
+          )}
+        </div>
 
-            <div class="mb-3">
-              <label for="exampleFormControlInput1" class="form-label">
-                Enter postal code
-              </label>
-              <input
-                className="form-control form-control-lg py-1"
-                placeholder="Enter postal code"
-                type="text"
-                {...register("postal_code", { required: true })}
-                aria-label="postal_code"
-              />
-            </div>
+        <div className="mb-3">
+          <label for="exampleFormControlInput1" className="form-label">
+            Enter street name
+          </label>
+          <input
+            className="form-control form-control-lg py-1"
+            type="text"
+            placeholder="Enter street name"
+            {...register("street_name", { required: true })}
+            aria-label="Street name"
+          />
+          {errors.street_name && (
+            <span className="alert alert-danger p-1" role="alert">
+              Street name is required
+            </span>
+          )}
+        </div>
 
-            <div class="mb-3">
-              <label for="exampleFormControlInput1" class="form-label">
-                Enter state 'available or unavailable
-              </label>
-              <input
-                className="form-control form-control-lg py-1"
-                placeholder="Enter state 'available or unavailable"
-                type="text"
-                {...register("status", { required: true })}
-                aria-label="status"
-              />
-            </div>
-            <div class="mb-3">
-              <label for="exampleFormControlInput1" class="form-label">
-                Enter city ID
-              </label>
-              <input
-                className="form-control form-control-lg py-1"
-                placeholder="Enter state 'available or unavailable"
-                type="text"
-                {...register("city", { required: true })}
-                aria-label="city"
-              />
-            </div>
-            <div class="mb-3">
-              <label for="exampleFormControlInput1" class="form-label">
-                Enter rent price
-              </label>
-              <input
-                className="form-control form-control-lg py-1"
-                placeholder="Enter state 'available or unavailable"
-                type="text"
-                {...register("rent", { required: true })}
-                aria-label="rent"
-              />
-            </div>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button type="submit">Add Location</Button>
-            <Button onClick={props.onHide}>Close</Button>
-          </Modal.Footer>
-        </form>
-      </Modal>
-    </div>
+        <div className="mb-3">
+          <label for="exampleFormControlInput1" className="form-label">
+            Enter postal code
+          </label>
+          <input
+            className="form-control form-control-lg py-1"
+            placeholder="Enter postal code"
+            type="text"
+            {...register("postal_code", { required: true })}
+            aria-label="postal_code"
+          />
+          {errors.post_code && (
+            <span className="alert alert-danger p-1" role="alert">
+              Postal code is required
+            </span>
+          )}
+        </div>
+
+        <div className="mb-3">
+          <label for="exampleFormControlInput1" className="form-label">
+            Enter state 'available or unavailable
+          </label>
+          <select
+            className="form-control form-control-lg py-1"
+            placeholder="Enter state 'available or unavailable"
+            type="text"
+            {...register("status", { required: true })}
+            aria-label="status"
+          >
+            <option value="">Select Sataus</option>
+            <option className="Available">Available</option>
+            <option className="Unavailable">Unavailable</option>
+          </select>
+          {errors.status && (
+            <span className="alert alert-danger p-1" role="alert">
+              Location status is required
+            </span>
+          )}
+        </div>
+        <div className="mb-3">
+          <label for="exampleFormControlInput1" className="form-label">
+            Select City
+          </label>
+          <select
+            className="form-control form-control-lg py-1"
+            placeholder="Enter state 'available or unavailable"
+            type="text"
+            {...register("city", { required: true })}
+            aria-label="city"
+          >
+            {cities?.map((data) => (
+              <option value={data.id}>{data.name}</option>
+            ))}
+          </select>
+        </div>
+        <div className="mb-3">
+          <label for="exampleFormControlInput1" className="form-label">
+            Enter rent price
+          </label>
+          <input
+            className="form-control form-control-lg py-1"
+            placeholder="Enter state 'available or unavailable"
+            type="text"
+            {...register("rent", { required: true })}
+            aria-label="rent"
+          />
+        </div>
+        <Button type="submit" className="float-end">
+          Create Location
+        </Button>
+      </form>
+    </>
   );
 }

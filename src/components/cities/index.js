@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useForm } from "react-hook-form";
 import CreateCity from "../create-city";
+import { Link} from "react-router-dom";
 import { axiosInstance } from "../../services/AxiosInstance";
 import Loader from "../loader";
 
@@ -14,6 +15,7 @@ export default function Cities() {
   const [isAddCity, setIsAddCity] = useState(false);
   const [cityData, setCityData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+
 
   const ASC = "ascending";
 
@@ -99,23 +101,23 @@ export default function Cities() {
 
   return (
     <div>
-      <h3 class="title py-3">List of Cities</h3>
+      <h3 className="title py-3">List of Cities</h3>
 
-      <div class="container shadow py-3">
-        <div class="row">
-          <div class="col-md-5 mx-auto">
-            <div class="small fw-light">Search City</div>
+      <div className="container shadow py-3">
+        <div className="row">
+          <div className="col-md-5 mx-auto">
+            <div className="small fw-light">Search City</div>
             <form onSubmit={handleSubmit(handleSearch)}>
-              <div class="input-group">
+              <div className="input-group">
                 <input
-                  class="form-control border-end-0 border rounded-pill"
+                  className="form-control border-end-0 border rounded-pill"
                   type="search"
                   id="example-search-input"
                   {...register("keyword", { required: true })}
                 />
-                <span class="input-group-append">
+                <span className="input-group-append">
                   <button
-                    class="btn btn-outline-secondary bg-white border-bottom-0 border rounded-pill ms-n5"
+                    className="btn btn-outline-secondary bg-white border-bottom-0 border rounded-pill ms-n5"
                     type="submit"
                   >
                     <FontAwesomeIcon icon={faSearch} />
@@ -125,8 +127,8 @@ export default function Cities() {
             </form>
             <select className="form-select mt-4" onChange={handleSort}>
               <option value="">Select</option>
-              <option value="name">Filter by name</option>
-              <option value="code">Filter by code</option>
+              <option value="name">Sort by name</option>
+              <option value="code">Sort by code</option>
             </select>
           </div>
         </div>
@@ -137,42 +139,29 @@ export default function Cities() {
       {!isLoading &&
         cities?.map((data) => (
           <>
-            <ul class="list-group">
-              <li class="list-group-item m-2">
-                {data?.name}{" "}
-                <Button
-                  onClick={() => {
-                    setIsEdit(true);
-                    setCityData(data);
-                  }}
-                  className="float-end m-1"
-                >
-                  Edit
-                </Button>{" "}
-                <Button
-                  onClick={() => handleDelete(data?.id)}
-                  className="m-1 float-end"
-                >
-                  Delete
-                </Button>
-              </li>
-            </ul>
+            <div className="container mt-6">
+              <div className="row">
+                <div className="col-sm">{data?.name}</div>
+                <div className="col-sm">
+                  City code
+                  {data?.code}
+                </div>
+                <div className="col-sm">
+                  <Link
+                  to={`/city/${data.id}/details`}
+                    className="float-end m-1"
+                  >
+                    City details
+                  </Link>
+                </div>
+              </div>
+            </div>
           </>
         ))}
-      {isEdit && (
-        <UpdateCity
-          show={isEdit}
-          onHide={() => setIsEdit(false)}
-          updatedata={cityData}
-        />
-      )}
-      {isAddCity && (
-        <CreateCity show={isAddCity} onHide={() => setIsAddCity(false)} />
-      )}
 
-      <button onClick={() => handleCreateCity()} className="float">
+      <Link to="/city/create/"  className="float">
         <FontAwesomeIcon icon={faPlus} className="my-float" />
-      </button>
+      </Link>
     </div>
   );
 }

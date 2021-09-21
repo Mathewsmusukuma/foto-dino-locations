@@ -101,23 +101,23 @@ export default function Locations() {
 
   return (
     <div>
-      <h3 class="title py-3">List of Hotels</h3>
+      <h3 className="title py-3">List of Hotels</h3>
 
-      <div class="container shadow py-3">
-        <div class="row">
-          <div class="col-md-5 mx-auto">
-            <div class="small fw-light">Search Location</div>
+      <div className="container shadow py-3">
+        <div className="row">
+          <div className="col-md-5 mx-auto">
+            <div className="small fw-light">Search Location</div>
             <form onSubmit={handleSubmit(handleSearch)}>
-              <div class="input-group">
+              <div className="input-group">
                 <input
-                  class="form-control border-end-0 border rounded-pill"
+                  className="form-control border-end-0 border rounded-pill"
                   type="search"
                   id="example-search-input"
                   {...register("search", { required: true })}
                 />
-                <span class="input-group-append">
+                <span className="input-group-append">
                   <button
-                    class="btn btn-outline-secondary bg-white border-bottom-0 border rounded-pill ms-n5"
+                    className="btn btn-outline-secondary bg-white border-bottom-0 border rounded-pill ms-n5"
                     type="submit"
                   >
                     <FontAwesomeIcon icon={faSearch} />
@@ -136,10 +136,10 @@ export default function Locations() {
 
       {isLoading && <Loader />}
 
-      <table class="table table-bordered table-hover">
+      <table className="table table-bordered table-hover">
         {!isLoading && (
           <>
-            <thead class="thead-dark">
+            <thead className="thead-dark">
               <tr>
                 <th scope="col">Hotel Name</th>
                 <th scope="col">Email</th>
@@ -184,14 +184,10 @@ export default function Locations() {
       </table>
 
       {isEdit && (
-        <UpdateLocation
-          show={isEdit}
-          onHide={() => setIsEdit(false)}
-          updatedata={cityData}
-        />
+        <UpdateLocation />
       )}
       {isAddCity && (
-        <CreateLocation show={isAddCity} onHide={() => setIsAddCity(false)} />
+        <CreateLocation />
       )}
 
       <button onClick={() => handleCreateCity()} className="float">

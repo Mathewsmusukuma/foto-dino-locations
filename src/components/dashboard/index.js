@@ -17,23 +17,7 @@ export default function Dashboard() {
   };
   return (
     <div>
-      <div class="col-md-5 mx-auto">
-        <button
-          className="btn btn-info btn-lg btn-square m-2"
-          onClick={handleCityView}
-        >
-         View Cities
-        </button>
-        <button
-          className="btn btn-success btn-lg btn-square m-2"
-          onClick={handleLocationView}
-        >
-         View Locations
-        </button>
-      </div>
-
       {isCity && <Cities />}
-      {isLocation && <Locations />}
     </div>
   );
 }
