@@ -1,8 +1,5 @@
 FROM node:alpine as builder
-
-RUN apt-get update
-RUN apt-get install gem -y && \
-    gem install -y bundler
+RUN gem install -y bundler
 
 WORKDIR '/app'
 COPY package*.json ./
